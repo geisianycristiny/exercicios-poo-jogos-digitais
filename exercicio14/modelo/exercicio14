@@ -1,0 +1,35 @@
+class NoDialogo:
+    def __init__(self, texto, opcoes=None):
+        self.texto = texto
+        self.opcoes = opcoes or []
+
+    def adicionar_opcao(self, texto_opcao, proximo_no):
+        self.opcoes.append((texto_opcao, proximo_no))
+
+    def eh_final(self):
+        return len(self.opcoes) == 0
+
+
+class SistemaDeDialogo:
+    def __init__(self, no_inicial):
+        self.no_atual = no_inicial
+
+    def iniciar(self):
+        while True:
+            print(f"\nNPC: {self.no_atual.texto}")
+
+            if self.no_atual.eh_final():
+                print("📜 Fim do diálogo.")
+                break
+
+            for i, (texto_opcao, _) in enumerate(self.no_atual.opcoes):
+                print(f"{i + 1}. {texto_opcao}")
+
+            escolha = input("Sua escolha: ")
+
+            if not escolha.isdigit() or not (1 <= int(escolha) <= len(self.no_atual.opcoes)):
+                print("Escolha inválida. Tente novamente.")
+                continue
+
+            _, proximo_no = self.no_atual.opcoes[int(escolha) - 1]
+            self.no_atual = proximo_no
