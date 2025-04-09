@@ -1,0 +1,80 @@
+import random
+
+# Classe base de uma carta
+class Carta:
+    def __init__(self, nome, vida, ataque):
+        self.nome = nome
+        self.vida = vida
+        self.ataque = ataque
+
+    def atacar(self, outra_carta):
+        print(f"{self.nome} ataca {outra_carta.nome} causando {self.ataque} de dano.")
+        outra_carta.vida -= self.ataque
+        if outra_carta.vida <= 0:
+            print(f"{outra_carta.nome} foi derrotado!")
+
+    def esta_viva(self):
+        return self.vida > 0
+
+    def __str__(self):
+        return f"{self.nome} (Vida: {self.vida}, Ataque: {self.ataque})"
+
+# Tipos específicos de cartas com herança
+class Guerreiro(Carta):
+    def __init__(self, nome):
+        super().__init__(nome, vida=30, ataque=7)
+
+class Mago(Carta):
+    def __init__(self, nome):
+        super().__init__(nome, vida=20, ataque=10)
+
+class Assassino(Carta):
+    def __init__(self, nome):
+        super().__init__(nome, vida=25, ataque=8)
+
+# Jogador com um baralho de cartas
+class Jogador:
+    def __init__(self, nome, cartas):
+        self.nome = nome
+        self.cartas = cartas
+
+    def tem_cartas_vivas(self):
+        return any(carta.esta_viva() for carta in self.cartas)
+
+    def proxima_carta_viva(self):
+        for carta in self.cartas:
+            if carta.esta_viva():
+                return carta
+        return None
+
+    def mostrar_cartas(self):
+        print(f"\nCartas de {self.nome}:")
+        for carta in self.cartas:
+            status = "VIVA" if carta.esta_viva() else "DERROTADA"
+            print(f"- {carta} [{status}]")
+
+# Lógica de turno
+def jogo_de_cartas(jogador1, jogador2):
+    turno = 0
+    print("⚔️ Início da Batalha de Cartas ⚔️")
+    
+    while jogador1.tem_cartas_vivas() and jogador2.tem_cartas_vivas():
+        print(f"\n===== TURNO {turno + 1} =====")
+        carta1 = jogador1.proxima_carta_viva()
+        carta2 = jogador2.proxima_carta_viva()
+
+        if turno % 2 == 0:
+            carta1.atacar(carta2)
+        else:
+            carta2.atacar(carta1)
+
+        jogador1.mostrar_cartas()
+        jogador2.mostrar_cartas()
+
+        turno += 1
+
+    print("\n🏁 Fim do jogo!")
+    if jogador1.tem_cartas_vivas():
+        print(f"🎉 {jogador1.nome} venceu!")
+    else:
+        print(f"🎉 {jogador2.nome} venceu!")
