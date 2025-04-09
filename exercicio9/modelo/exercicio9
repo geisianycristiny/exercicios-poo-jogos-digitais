@@ -1,0 +1,40 @@
+class Personagem:
+    def __init__(self, nome):
+        self.nome = nome
+        self.nivel = 1
+        self.experiencia = 0
+        self.experiencia_para_proximo_nivel = 100
+
+        self.forca = 10
+        self.agilidade = 8
+        self.vida_maxima = 100
+        self.vida_atual = self.vida_maxima
+
+    def ganhar_experiencia(self, quantidade):
+        print(f"{self.nome} ganhou {quantidade} XP!")
+        self.experiencia += quantidade
+        while self.experiencia >= self.experiencia_para_proximo_nivel:
+            self.subir_nivel()
+
+    def subir_nivel(self):
+        self.experiencia -= self.experiencia_para_proximo_nivel
+        self.nivel += 1
+        self.experiencia_para_proximo_nivel += 50  # Aumenta a dificuldade a cada nível
+
+        # Aumentando os atributos
+        self.forca += 3
+        self.agilidade += 2
+        self.vida_maxima += 20
+        self.vida_atual = self.vida_maxima
+
+        print(f"{self.nome} subiu para o nível {self.nivel}!")
+        print(f"→ Força: {self.forca}, Agilidade: {self.agilidade}, Vida: {self.vida_maxima}")
+
+    def status(self):
+        print(f"--- {self.nome} ---")
+        print(f"Nível: {self.nivel}")
+        print(f"XP: {self.experiencia}/{self.experiencia_para_proximo_nivel}")
+        print(f"Força: {self.forca}")
+        print(f"Agilidade: {self.agilidade}")
+        print(f"Vida: {self.vida_atual}/{self.vida_maxima}")
+        print()
