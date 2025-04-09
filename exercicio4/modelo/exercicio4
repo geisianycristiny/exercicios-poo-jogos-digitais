@@ -1,0 +1,58 @@
+class Item:
+    def __init__(self, nome, tipo, valor):
+        self.nome = nome          # Nome do item (ex: "Poção de Vida")
+        self.tipo = tipo          # Tipo do item ("vida", "dano", "velocidade")
+        self.valor = valor        # Valor do efeito (ex: +20 de vida)
+
+    def usar(self):
+        return (self.tipo, self.valor)
+
+    def __str__(self):
+        return f"{self.nome} ({self.tipo}: +{self.valor})"
+
+
+class Inventario:
+    def __init__(self, capacidade):
+        self.capacidade = capacidade
+        self.itens = []
+
+    def adicionar_item(self, item):
+        if len(self.itens) < self.capacidade:
+            self.itens.append(item)
+            print(f"Item '{item.nome}' adicionado ao inventário.")
+        else:
+            print("Inventário cheio! Não é possível adicionar mais itens.")
+
+    def remover_item(self, nome_item):
+        for item in self.itens:
+            if item.nome == nome_item:
+                self.itens.remove(item)
+                print(f"Item '{nome_item}' removido do inventário.")
+                return
+        print(f"Item '{nome_item}' não encontrado no inventário.")
+
+    def usar_item(self, nome_item):
+        for item in self.itens:
+            if item.nome == nome_item:
+                efeito = item.usar()
+                self.itens.remove(item)
+                print(f"Usou o item '{nome_item}'. Efeito: {efeito}")
+                return efeito
+        print(f"Item '{nome_item}' não encontrado.")
+        return None
+
+    def listar_itens(self):
+        if not self.itens:
+            print("Inventário vazio.")
+        else:
+            print("Itens no inventário:")
+            for item in self.itens:
+                print(f" - {item}")
+
+
+# Exemplo de uso
+if __name__ == "__main__":
+    # Criando alguns itens
+    pocao = Item("Poção de Vida", "vida", 20)
+    espada = Item("Espada Flamejante", "dano", 10)
+    bota = Item("Bota Veloz", "velocidade", 5)
