@@ -1,0 +1,36 @@
+class EstadoDoJogo:
+    _instancia = None  # Atributo de classe para guardar a única instância
+
+    def __new__(cls):
+        if cls._instancia is None:
+            cls._instancia = super(EstadoDoJogo, cls).__new__(cls)
+            # Inicializa só uma vez
+            cls._instancia.nivel_atual = 1
+            cls._instancia.pontuacao = 0
+            cls._instancia.vidas = 3
+        return cls._instancia
+
+    def mostrar_estado(self):
+        print(f"Nível: {self.nivel_atual}, Pontuação: {self.pontuacao}, Vidas: {self.vidas}")
+
+    def resetar(self):
+        self.nivel_atual = 1
+        self.pontuacao = 0
+        self.vidas = 3
+
+
+# Exemplo de uso
+if __name__ == "__main__":
+    estado1 = EstadoDoJogo()
+    estado1.pontuacao += 100
+    estado1.nivel_atual = 2
+    estado1.vidas -= 1
+
+    estado1.mostrar_estado()
+
+    # Criando "outra" instância (mas é a mesma!)
+    estado2 = EstadoDoJogo()
+    estado2.mostrar_estado()
+
+    # Prova de que são a mesma instância
+    print("Mesmo objeto?", estado1 is estado2)  # True
