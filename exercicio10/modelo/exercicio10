@@ -1,0 +1,65 @@
+# ========================
+# Observer Pattern
+# ========================
+
+# Interface para os observadores
+class Comerciante:
+    def atualizar_preco(self, item, novo_preco):
+        raise NotImplementedError("Subclasse deve implementar este método")
+
+
+# Sujeito (mercado que notifica os comerciantes)
+class Mercado:
+    def __init__(self):
+        self.observadores = []
+        self.precos = {
+            "Espada": 100,
+            "Poção": 50,
+            "Armadura": 150
+        }
+        self.oferta = {
+            "Espada": 0,
+            "Poção": 0,
+            "Armadura": 0
+        }
+
+    def adicionar_observador(self, comerciante):
+        self.observadores.append(comerciante)
+
+    def notificar_observadores(self, item):
+        for obs in self.observadores:
+            obs.atualizar_preco(item, self.precos[item])
+
+    def vender_para_mercado(self, item, quantidade):
+        if item in self.oferta:
+            self.oferta[item] += quantidade
+            self.ajustar_preco(item)
+
+    def ajustar_preco(self, item):
+        base_preco = {
+            "Espada": 100,
+            "Poção": 50,
+            "Armadura": 150
+        }
+
+        # Simples lógica de oferta e demanda
+        novo_preco = max(10, base_preco[item] - self.oferta[item] * 5)
+        if novo_preco != self.precos[item]:
+            self.precos[item] = novo_preco
+            self.notificar_observadores(item)
+
+
+# Comerciante NPC que observa o mercado
+class NPCComerciante(Comerciante):
+    def __init__(self, nome):
+        self.nome = nome
+        self.precos_local = {}
+
+    def atualizar_preco(self, item, novo_preco):
+        self.precos_local[item] = novo_preco
+        print(f"{self.nome} atualizou o preço de {item} para {novo_preco} moedas.")
+
+    def mostrar_precos(self):
+        print(f"\n{self.nome} - Preços atuais:")
+        for item, preco in self.precos_local.items():
+            print(f"{item}: {preco} moedas")
