@@ -1,0 +1,77 @@
+using System;
+
+public class EventosDoJogo
+{
+    // 1. Delegates (assinaturas dos eventos)
+    public delegate void EventoSimples();
+
+    // 2. Eventos baseados nos delegates
+    public static event EventoSimples ChefeDerrotado;
+    public static event EventoSimples JogadorSubiuDeNivel;
+    public static event EventoSimples MissaoConcluida;
+
+    // 3. Métodos para disparar os eventos
+    public static void DispararChefeDerrotado()
+    {
+        Console.WriteLine("O chefe foi derrotado!");
+        ChefeDerrotado?.Invoke();
+    }
+
+    public static void DispararJogadorSubiuDeNivel()
+    {
+        Console.WriteLine("O jogador subiu de nível!");
+        JogadorSubiuDeNivel?.Invoke();
+    }
+
+    public static void DispararMissaoConcluida()
+    {
+        Console.WriteLine("Missão concluída!");
+        MissaoConcluida?.Invoke();
+    }
+}
+
+public class Mundo
+{
+    public Mundo()
+    {
+        EventosDoJogo.ChefeDerrotado += LiberarNovaArea;
+    }
+
+    void LiberarNovaArea()
+    {
+        Console.WriteLine("[Mundo] Nova área liberada!");
+    }
+}
+
+public class Jogador
+{
+    public Jogador()
+    {
+        EventosDoJogo.JogadorSubiuDeNivel += AumentarAtributos;
+        EventosDoJogo.MissaoConcluida += Recompensar;
+    }
+
+    void AumentarAtributos()
+    {
+        Console.WriteLine("[Jogador] Atributos aumentados!");
+    }
+
+    void Recompensar()
+    {
+        Console.WriteLine("[Jogador] Recompensa recebida!");
+    }
+}
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Criando ouvintes (inscrições ocorrem nos construtores)
+        Mundo mundo = new Mundo();
+        Jogador jogador = new Jogador();
+
+        // Disparando eventos
+        EventosDoJogo.DispararChefeDerrotado();
+        EventosDoJogo.DispararJogadorSubiuDeNivel();
+        EventosDoJogo.DispararMissaoConcluida();
+    }
+}
