@@ -1,0 +1,62 @@
+# Classe base
+class Habilidade:
+    def __init__(self, nome, custo_de_mana, dano):
+        self.nome = nome
+        self.custo_de_mana = custo_de_mana
+        self.dano = dano
+
+    def usar(self, personagem):
+        if personagem.mana >= self.custo_de_mana:
+            personagem.mana -= self.custo_de_mana
+            print(f"{personagem.nome} usou {self.nome}, causando {self.dano} de dano.")
+            return self.dano
+        else:
+            print(f"{personagem.nome} não tem mana suficiente para usar {self.nome}.")
+            return 0
+
+
+# Subclasses específicas
+class BolaDeFogo(Habilidade):
+    def __init__(self):
+        super().__init__("Bola de Fogo", custo_de_mana=20, dano=50)
+
+class RaioDeGelo(Habilidade):
+    def __init__(self):
+        super().__init__("Raio de Gelo", custo_de_mana=15, dano=35)
+
+class GolpeDeEspada(Habilidade):
+    def __init__(self):
+        super().__init__("Golpe de Espada", custo_de_mana=5, dano=20)
+
+
+# Classe Personagem
+class Personagem:
+    def __init__(self, nome, mana):
+        self.nome = nome
+        self.mana = mana
+
+    def usar_habilidade(self, habilidade):
+        return habilidade.usar(self)
+
+    def __str__(self):
+        return f"{self.nome} (Mana: {self.mana})"
+
+
+# Exemplo de uso
+if __name__ == "__main__":
+    # Criando o personagem
+    heroi = Personagem("Arthas", mana=40)
+
+    # Criando habilidades
+    fogo = BolaDeFogo()
+    gelo = RaioDeGelo()
+    espada = GolpeDeEspada()
+
+    # Usando habilidades
+    print(heroi)
+    heroi.usar_habilidade(fogo)
+    print(heroi)
+    heroi.usar_habilidade(gelo)
+    print(heroi)
+    heroi.usar_habilidade(espada)
+    print(heroi)
