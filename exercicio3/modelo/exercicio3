@@ -1,0 +1,100 @@
+import random
+from abc import ABC, abstractmethod
+
+# Classe abstrata Item
+class Item(ABC):
+    @abstractmethod
+    def usar(self, jogador):
+        pass
+
+# Classe Jogador
+class Jogador:
+    def __init__(self, nome, vida, ataque, defesa):
+        self.nome = nome
+        self.vida = vida
+        self.ataque = ataque
+        self.defesa = defesa
+    
+    def __str__(self):
+        return f"{self.nome} - Vida: {self.vida}, Ataque: {self.ataque}, Defesa: {self.defesa}"
+
+# Classe Arma (subclasse de Item)
+class Arma(Item):
+    def __init__(self, nome, aumento_ataque):
+        self.nome = nome
+        self.aumento_ataque = aumento_ataque
+    
+    def usar(self, jogador):
+        jogador.ataque += self.aumento_ataque
+        print(f"{jogador.nome} equipou a arma {self.nome} e seu ataque aumentou em {self.aumento_ataque}.")
+
+# Classe Poção (subclasse de Item)
+class Pocao(Item):
+    def __init__(self, nome, recuperacao_vida):
+        self.nome = nome
+        self.recuperacao_vida = recuperacao_vida
+    
+    def usar(self, jogador):
+        jogador.vida += self.recuperacao_vida
+        print(f"{jogador.nome} usou a poção {self.nome} e recuperou {self.recuperacao_vida} de vida.")
+
+# Classe Armadura (subclasse de Item)
+class Armadura(Item):
+    def __init__(self, nome, aumento_defesa):
+        self.nome = nome
+        self.aumento_defesa = aumento_defesa
+    
+    def usar(self, jogador):
+        jogador.defesa += self.aumento_defesa
+        print(f"{jogador.nome} equipou a armadura {self.nome} e sua defesa aumentou em {self.aumento_defesa}.")
+
+# Fábrica de Itens
+class FabricaDeItens:
+    @staticmethod
+    def gerar_item(tipo):
+        if tipo == "arma":
+            return FabricaDeItens._criar_arma()
+        elif tipo == "pocao":
+            return FabricaDeItens._criar_pocao()
+        elif tipo == "armadura":
+            return FabricaDeItens._criar_armadura()
+        else:
+            raise ValueError("Tipo de item desconhecido.")
+
+    @staticmethod
+    def _criar_arma():
+        armas = [
+            Arma("Espada do Dragão", 10),
+            Arma("Martelo Gigante", 15),
+            Arma("Faca Dourada", 5)
+        ]
+        return random.choice(armas)
+    
+    @staticmethod
+    def _criar_pocao():
+        potions = [
+            Pocao("Poção de Cura", 50),
+            Pocao("Poção de Energia", 30),
+            Pocao("Poção de Revitalização", 100)
+        ]
+        return random.choice(potions)
+    
+    @staticmethod
+    def _criar_armadura():
+        armaduras = [
+            Armadura("Armadura de Ferro", 5),
+            Armadura("Armadura de Platina", 10),
+            Armadura("Capa de Invisibilidade", 2)
+        ]
+        return random.choice(armaduras)
+
+# Exemplo de uso
+jogador = Jogador("Herói", 100, 20, 5)
+
+# Gerando um item aleatório e usando-o
+item_aleatorio = FabricaDeItens.gerar_item(random.choice(["arma", "pocao", "armadura"]))
+print(f"\nItem gerado: {item_aleatorio.__class__.__name__} - {item_aleatorio.nome}")
+item_aleatorio.usar(jogador)
+
+print("\nStatus do Jogador após o uso do item:")
+print(jogador)
