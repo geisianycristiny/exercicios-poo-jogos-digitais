@@ -1,0 +1,45 @@
+class Personagem2D:
+    def __init__(self, nome, x=0, y=0):
+        self.nome = nome
+        self.x = x
+        self.y = y
+        self.velocidade_y = 0
+        self.no_chao = True
+
+        # Constantes físicas
+        self.gravidade = 1
+        self.forca_pulo = 15
+        self.velocidade_andar = 5
+        self.chao_y = 0  # y = 0 é o chão
+
+    def aplicar_gravidade(self):
+        if not self.no_chao:
+            self.velocidade_y -= self.gravidade
+            self.y += self.velocidade_y
+            print(f"{self.nome} está caindo. Y: {self.y:.2f}")
+
+            if self.y <= self.chao_y:
+                self.y = self.chao_y
+                self.velocidade_y = 0
+                self.no_chao = True
+                print(f"{self.nome} tocou o chão.")
+
+    def andar(self, direcao):
+        if direcao == "direita":
+            self.x += self.velocidade_andar
+        elif direcao == "esquerda":
+            self.x -= self.velocidade_andar
+        print(f"{self.nome} andou para {direcao}. X: {self.x}")
+
+    def pular(self):
+        if self.no_chao:
+            self.velocidade_y = self.forca_pulo
+            self.no_chao = False
+            print(f"{self.nome} pulou!")
+
+    def atualizar(self):
+        self.aplicar_gravidade()
+
+    def status(self):
+        print(f"[STATUS] {self.nome} - Posição: ({self.x}, {self.y:.2f}) | No chão: {self.no_chao}")
+
