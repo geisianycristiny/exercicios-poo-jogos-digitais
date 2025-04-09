@@ -1,0 +1,53 @@
+# Arma
+class Arma:
+    def __init__(self, nome, dano_bonus):
+        self.nome = nome
+        self.dano_bonus = dano_bonus
+
+# Armadura
+class Armadura:
+    def __init__(self, nome, defesa_bonus):
+        self.nome = nome
+        self.defesa_bonus = defesa_bonus
+
+# Tipo de Ataque (Estratégia)
+class TipoDeAtaque:
+    def atacar(self, personagem):
+        raise NotImplementedError("Subclasse deve implementar este método")
+
+class AtaqueCorpoACorpo(TipoDeAtaque):
+    def atacar(self, personagem):
+        dano = personagem.forca_base + personagem.arma.dano_bonus
+        print(f"{personagem.nome} ataca corpo a corpo com {personagem.arma.nome}, causando {dano} de dano!")
+
+class AtaqueADistancia(TipoDeAtaque):
+    def atacar(self, personagem):
+        dano = personagem.forca_base // 2 + personagem.arma.dano_bonus
+        print(f"{personagem.nome} ataca à distância com {personagem.arma.nome}, causando {dano} de dano!")
+
+# Personagem
+class Personagem:
+    def __init__(self, nome, forca_base, arma, armadura, tipo_ataque):
+        self.nome = nome
+        self.forca_base = forca_base
+        self.arma = arma
+        self.armadura = armadura
+        self.tipo_ataque = tipo_ataque
+
+    def atacar(self):
+        self.tipo_ataque.atacar(self)
+
+    def trocar_arma(self, nova_arma):
+        print(f"{self.nome} trocou para {nova_arma.nome}")
+        self.arma = nova_arma
+
+    def trocar_armadura(self, nova_armadura):
+        print(f"{self.nome} equipou {nova_armadura.nome}")
+        self.armadura = nova_armadura
+
+    def mostrar_status(self):
+        print(f"--- {self.nome} ---")
+        print(f"Força Base: {self.forca_base}")
+        print(f"Arma: {self.arma.nome} (+{self.arma.dano_bonus} dano)")
+        print(f"Armadura: {self.armadura.nome} (+{self.armadura.defesa_bonus} defesa)")
+        print()
