@@ -1,0 +1,79 @@
+from abc import ABC, abstractmethod
+
+# Classe abstrata NPC
+class NPC(ABC):
+    def __init__(self, nome, x, y):
+        self.nome = nome  # Nome do NPC
+        self.x = x        # Posições X e Y
+        self.y = y
+
+    @abstractmethod
+    def mover(self):
+        pass
+
+    @abstractmethod
+    def interagir(self):
+        pass
+
+# Subclasse Vendedor
+class Vendedor(NPC):
+    def __init__(self, nome, x, y):
+        super().__init__(nome, x, y)
+    
+    def mover(self):
+        print(f"{self.nome} está se movendo pelo mercado.")
+    
+    def interagir(self):
+        print(f"{self.nome}: Olá, você gostaria de comprar algo?")
+
+# Subclasse Guarda
+class Guarda(NPC):
+    def __init__(self, nome, x, y):
+        super().__init__(nome, x, y)
+    
+    def mover(self):
+        print(f"{self.nome} está patrulhando a cidade.")
+    
+    def interagir(self):
+        print(f"{self.nome}: Você está em uma área restrita!")
+
+# Subclasse Vilão
+class Viloes(NPC):
+    def __init__(self, nome, x, y):
+        super().__init__(nome, x, y)
+    
+    def mover(self, jogador_x, jogador_y):
+        # O vilão persegue o jogador
+        if self.x < jogador_x:
+            self.x += 1
+        elif self.x > jogador_x:
+            self.x -= 1
+        
+        if self.y < jogador_y:
+            self.y += 1
+        elif self.y > jogador_y:
+            self.y -= 1
+
+        print(f"{self.nome} está se aproximando do jogador! Posição atual: ({self.x}, {self.y})")
+    
+    def interagir(self):
+        print(f"{self.nome}: Eu vou te pegar!")
+
+    def atacar(self, jogador):
+        print(f"{self.nome} ataca {jogador.nome} com um golpe mortal!")
+
+# Classe Jogador
+class Jogador:
+    def __init__(self, nome, x, y):
+        self.nome = nome
+        self.x = x
+        self.y = y
+
+    def mover(self, x, y):
+        self.x = x
+        self.y = y
+        print(f"{self.nome} moveu-se para a posição ({self.x}, {self.y})")
+
+# Exemplo de uso:
+jogador = Jogador("Jogador", 0, 0)
+vilao = Viloes("Vilão", 5, 5)
