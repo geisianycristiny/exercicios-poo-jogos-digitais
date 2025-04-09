@@ -1,0 +1,71 @@
+# Classe base Missão
+class Missao:
+    def __init__(self, descricao):
+        self.descricao = descricao
+        self.completa = False
+
+    def aceitar(self):
+        print(f"Missão aceita: {self.descricao}")
+
+    def verificar_progresso(self, *args):
+        raise NotImplementedError("Subclasse deve implementar este método")
+
+    def esta_completa(self):
+        return self.completa
+
+
+# Missão de derrotar inimigos
+class MissaoDerrotarInimigos(Missao):
+    def __init__(self, descricao, inimigos_necessarios):
+        super().__init__(descricao)
+        self.inimigos_derrotados = 0
+        self.inimigos_necessarios = inimigos_necessarios
+
+    def verificar_progresso(self, inimigos_derrotados):
+        self.inimigos_derrotados += inimigos_derrotados
+        if self.inimigos_derrotados >= self.inimigos_necessarios:
+            self.completa = True
+            print("Missão completa: Inimigos derrotados!")
+
+
+# Missão de coletar itens
+class MissaoColetarItens(Missao):
+    def __init__(self, descricao, itens_necessarios):
+        super().__init__(descricao)
+        self.itens_coletados = 0
+        self.itens_necessarios = itens_necessarios
+
+    def verificar_progresso(self, itens_coletados):
+        self.itens_coletados += itens_coletados
+        if self.itens_coletados >= self.itens_necessarios:
+            self.completa = True
+            print("Missão completa: Itens coletados!")
+
+
+# Missão de explorar área
+class MissaoExplorarArea(Missao):
+    def __init__(self, descricao, area_alvo):
+        super().__init__(descricao)
+        self.area_alvo = area_alvo
+        self.explorada = False
+
+    def verificar_progresso(self, area_explorada):
+        if area_explorada == self.area_alvo:
+            self.completa = True
+            print(f"Missão completa: Área '{self.area_alvo}' explorada!")
+
+
+# Jogador
+class Jogador:
+    def __init__(self, nome):
+        self.nome = nome
+        self.missoes_ativas = []
+
+    def aceitar_missao(self, missao):
+        missao.aceitar()
+        self.missoes_ativas.append(missao)
+
+    def verificar_missoes(self, tipo, valor):
+        for missao in self.missoes_ativas:
+            if not missao.esta_completa():
+                missao.verificar_progresso(valor)
