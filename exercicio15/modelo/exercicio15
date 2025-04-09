@@ -1,0 +1,48 @@
+# Interface base para os estados
+class EstadoInimigo:
+    def executar(self, inimigo):
+        pass
+
+
+# Estado: Patrulhando
+class Patrulhando(EstadoInimigo):
+    def executar(self, inimigo):
+        print("[Patrulhando] O inimigo está caminhando pela área.")
+        if inimigo.jogador_visivel:
+            print("  > O inimigo viu o jogador! Trocando para PERSEGUINDO.")
+            inimigo.trocar_estado(Perseguindo())
+
+
+# Estado: Perseguindo
+class Perseguindo(EstadoInimigo):
+    def executar(self, inimigo):
+        print("[Perseguindo] O inimigo está correndo atrás do jogador.")
+        if not inimigo.jogador_visivel:
+            print("  > Jogador sumiu! Voltando para PATRULHANDO.")
+            inimigo.trocar_estado(Patrulhando())
+        elif inimigo.jogador_ao_alcance:
+            print("  > Jogador está ao alcance! Trocando para ATACANDO.")
+            inimigo.trocar_estado(Atacando())
+
+
+# Estado: Atacando
+class Atacando(EstadoInimigo):
+    def executar(self, inimigo):
+        print("[Atacando] O inimigo está atacando o jogador!")
+        if not inimigo.jogador_ao_alcance:
+            print("  > Jogador fugiu! Voltando para PERSEGUINDO.")
+            inimigo.trocar_estado(Perseguindo())
+
+
+# Classe do Inimigo que troca de estado
+class Inimigo:
+    def __init__(self):
+        self.estado_atual = Patrulhando()
+        self.jogador_visivel = False
+        self.jogador_ao_alcance = False
+
+    def atualizar(self):
+        self.estado_atual.executar(self)
+
+    def trocar_estado(self, novo_estado):
+        self.estado_atual = novo_estado
