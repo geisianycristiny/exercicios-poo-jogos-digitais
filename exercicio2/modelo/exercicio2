@@ -1,0 +1,51 @@
+from abc import ABC, abstractmethod
+
+# Interface IAtacante
+class IAtacante(ABC):
+    @abstractmethod
+    def atacar(self, inimigo):
+        pass
+
+# Classe Inimigo
+class Inimigo:
+    def __init__(self, nome, vida):
+        self.nome = nome
+        self.vida = vida
+    
+    def receber_dano(self, dano):
+        self.vida -= dano
+        if self.vida <= 0:
+            self.vida = 0
+            print(f"{self.nome} foi derrotado!")
+        else:
+            print(f"{self.nome} agora tem {self.vida} de vida.")
+
+# Classe Guerreiro
+class Guerreiro(IAtacante):
+    def __init__(self, nome):
+        self.nome = nome
+
+    def atacar(self, inimigo):
+        dano = 10  # O guerreiro causa 10 de dano
+        print(f"{self.nome} ataca com sua espada!")
+        inimigo.receber_dano(dano)
+
+# Classe Mago
+class Mago(IAtacante):
+    def __init__(self, nome):
+        self.nome = nome
+
+    def atacar(self, inimigo):
+        dano = 8  # O mago causa 8 de dano com magia
+        print(f"{self.nome} lança uma bola de fogo!")
+        inimigo.receber_dano(dano)
+
+# Classe Arqueiro
+class Arqueiro(IAtacante):
+    def __init__(self, nome):
+        self.nome = nome
+
+    def atacar(self, inimigo):
+        dano = 6  # O arqueiro causa 6 de dano com flechas
+        print(f"{self.nome} dispara uma flecha!")
+        inimigo.receber_dano(dano)
